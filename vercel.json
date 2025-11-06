@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "# NOTE": "Added build/install command fallbacks to ensure devDependencies (vite) are installed on Vercel builds.",
+  "installCommand": "npm install --include=dev",
+  "buildCommand": "npm install --include=dev && npm run build",
   "builds": [
     { "src": "server/index.ts", "use": "@vercel/node", "config": { "runtime": "nodejs22.x" } },
     { "src": "dist/public/**", "use": "@vercel/static" }
