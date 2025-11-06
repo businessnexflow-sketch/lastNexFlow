@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "server/index.ts", "use": "@vercel/node", "config": { "runtime": "nodejs22.x" } },
+    { "src": "dist/public/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "server/index.ts" },
+    { "src": "/assets/(.*)", "dest": "dist/public/assets/$1" },
+    { "src": "/(.*)", "dest": "dist/public/index.html" }
+  ]
+}

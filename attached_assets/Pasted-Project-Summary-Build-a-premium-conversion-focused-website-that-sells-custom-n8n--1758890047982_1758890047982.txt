@@ -1,0 +1,275 @@
+Project Summary
+---------------
+Build a premium, conversion-focused website that sells custom n8n automation creation services. The website must look modern, minimal, and highly polished with rich micro-interactions and animations. All on-site copy, labels, headings, and user-facing content must be in **Georgian (ქართული)**, **except** the order form fields and placeholders — those must be in **English only**. **There must be no pricing page** anywhere on the site.
+
+Primary goals:
+- Convert visitors into qualified project requests via a single, best-in-class Order experience (multi-step, animated, context-aware).
+- Communicate trust, expertise, and quality through design, microcopy (Georgian), and sample case visuals.
+- Provide an admin backend to manage incoming requests and connect them to Slack/Email/n8n where needed.
+
+Target audience
+---------------
+Small-to-medium business owners, marketing managers, customer support leads, and technical teams in Georgia who want bespoke automation (n8n workflows) built for their operations.
+
+Brand / Visual Guidelines
+-------------------------
+- Tone: professional, confident, approachable.
+- Georgian fonts: primary: **FiraGO** or **BPG Nino Mtavruli** (for headings). Body: **BPG Arial** or FiraGO Regular. Provide webfont setup and fallbacks.
+- Color palette:
+  - Primary: deep blue / tech-indigo (for CTAs and accents)
+  - Secondary: soft violet / cyan gradient for highlights
+  - Neutral: off-white background (#FBFBFD), graphite text
+  - Accents: subtle neon for micro-animations (sparingly)
+- Spacing: generous whitespace, large hero, 8–10px baseline grid.
+- Shape language: rounded corners (8–16px), soft shadows, glass-card elements.
+- Micro-animations: hover lifts, ghost glows, subtle parallax, SVG path animations.
+- Use Lottie JSON animations for complex micro-interactions and Framer Motion for component transitions. Provide fallback SVG/CSS animations.
+
+Must-have Constraints
+---------------------
+1. **All labels, headings, descriptions, CTAs and visible content must be Georgian.** (Provide Georgian strings below.)
+2. **Order form page and its form field labels/placeholders must be English only.**
+3. **No pricing page anywhere.** Never show prices or tiers. Use language like “Request a quote” (in Georgian) or “Submit request” (in English for form button).
+4. SEO-friendly server-rendered Next.js (or SSR-capable React) app.
+5. Responsive (desktop/tablet/mobile) with mobile-first animations gracefully toned down on older devices.
+
+Top-level Pages & Detailed Requirements
+--------------------------------------
+
+1) Home Page (მთავარი)
+   - Hero:
+     - Full-bleed, modern hero with animated background (SVG workflow lines + subtle node pulses).
+     - Georgian hero headline: use provided Georgian copy (see Appendix).
+     - Subheading (Georgian) that explains the value in 1–2 lines.
+     - Primary CTA (Georgian): “შეუკვეთე ახლა” — scrolls or opens the Order page modal.
+     - Secondary CTA (Georgian): “ნახე სერვისები” — anchors to Services.
+     - Visual: Animated Lottie or an SVG “flowchart” that animates when hero comes into view.
+   - Why-us strip:
+     - 3–4 animated benefit cards (Georgian title + short Georgian sentence). Cards should lift and show micro-animation on hover.
+     - Icons: custom line icons that animate (draw-in) on view.
+   - How it works (Georgian):
+     - 3-step horizontal timeline (Discover → Build → Deliver) with animated connectors and small Lottie illustrations.
+   - Featured case snippet / carousel:
+     - small project snapshots with short Georgian captions and hover-to-expand preview. Each item opens modal with more details (Georgian).
+   - Testimonials (Georgian) with avatar carousel.
+   - CTA strip (Georgian) — repeated “შეუკვეთე ახლა”.
+
+2) Services Page (სერვისები)
+   - Grid of service cards (4–8 items).
+   - Each card contains:
+     - Georgian title, 1–2-line Georgian description.
+     - Small animated icon (Lottie or SVG).
+     - “გაიგე მეტი” button (Georgian) that opens a service details modal (all content Georgian).
+   - Hover effect: lift + neon edge + soft shadow.
+   - Filtering: allow visitors to filter by category (e.g., Messaging, CRM, Data Sync, Email Automation) — labels in Georgian.
+
+3) Order Page (შეკვეთა) — **THE FOCUS** (design as a full-screen interactive experience)
+   - This must be the most advanced page. Build it as a **multi-step wizard** (single-page application with animated transitions between steps).
+   - Visual context: interactive animated background that visually responds to the user’s choices: a node graph grows/changes as they select integrations (e.g., choose "WhatsApp" and a WhatsApp node appears).
+   - Desktop layout: centered card (max-width 880px) with blurred glass background over animated SVG. Mobile: full-width stacked.
+
+   Order flow (ENGLISH labels & placeholders only — the visible success confirmation and non-form copy are Georgian)
+   -----------------------------------------------------------------------------------------
+   Step 0: Intro (Georgian headline + subtext) with CTA "Start order" (Georgian).
+   Step 1: Project basics (FORM FIELDS — English)
+     - Full Name (input) — placeholder "Full name"
+     - Email Address (input) — placeholder "Email address"
+     - Company Name (optional) — placeholder "Company (optional)"
+     - Project Name — placeholder "Project name"
+     - Buttons: Next / Back (English)
+     - Live validation: inline, accessible, keyboard-friendly.
+   Step 2: Select Automation Type (FORM UI — English)
+     - Dropdown: Type of Automation (options in English: "WhatsApp/Messenger chatbot", "CRM integration", "Email automation", "File sync / ETL", "Custom workflow - explain")
+     - When user selects, show a short contextual help tooltip (Georgian) describing what that automation typically includes.
+     - If "Custom" chosen, show a required English textarea: "Short Project Description" (placeholder).
+   Step 3: Integrations & data (FORM UI — English + dynamic)
+     - Multi-select list of integrations in English (e.g., "Google Sheets", "Airtable", "HubSpot", "Stripe", "Meta/WhatsApp", "Telegram", "Google Drive", "Dropbox", "MySQL", "Postgres", "Webhook")
+     - For each chosen integration, show a small animated icon and a conditional mini-question in English: "Do you have API keys or credentials?" (Yes/No)
+       - If Yes → show a secure way to attach credentials (file upload, or later securely via encrypted link). Do NOT send credentials by email in plain text.
+     - Option to schedule a free discovery call (Georgian label with time-picker UI).
+   Step 4: Attach files & examples (FORM UI — English)
+     - Drag-and-drop uploads (accept CSV, JSON, PNG, PDF). Show preview thumbnails and file size limits.
+     - Optional link field (English) — "Link to example data / docs"
+   Step 5: Timeline & priority (FORM UI — English)
+     - Radio or slider for delivery speed (e.g., "Standard — 7–14 days", "Fast — 3–5 days") — DO NOT show prices. Show estimated delivery in days only if needed.
+     - Priority notes (English textarea).
+   Step 6: Review (ENGLISH)
+     - Animated order summary card (reads back all English form answers) with nice transitions.
+     - Button: "Submit request" (ENGLISH - final submit)
+   On Submit:
+     - UX: replace wizard with a full-screen success state that animates a node closing or confetti + a Lottie checkmark. Show the success message in Georgian: **"შეკვეთა წარმატებით გაიგზავნა! ჩვენ მალე დაგიკავშირდებით."**
+     - Send: save order to DB, send email (Georgian and English short confirmation), notify Slack channel, optionally create a record in Airtable / Google Sheets.
+     - Provide shareable Order ID (ex: ORD-2025-0001).
+     - Offer button (Georgian) to "გათვალიერება ჩემი შეკვეთის სტატუსი" — opens a simple public-status page for that order ID (token-protected).
+
+   Extra order UX details:
+   - Animated progress bar (framer motion) that morphs as user moves through steps.
+   - Microcopy tooltips in Georgian that appear inline to explain technical terms.
+   - Autosave: persist partial entries in localStorage and allow users to resume.
+   - Validation: client-side + server-side with clear localization.
+   - Accessibility: all fields labeled, focus outlines, ARIA-live for success messages.
+   - Security: file uploads are scanned and sanitized on the backend; credentials must never be emailed; provide secure instructions for handing credentials to the team.
+
+4) About Page (ჩვენ შესახებ)
+   - Georgian company story, mission, and team bios (Georgian).
+   - Timeline of milestones (animated horizontal timeline).
+   - Team cards with hover motion (Georgian names + roles).
+   - Section: "How we build automation" — an illustrated workflow in Georgian.
+
+5) Contact Page (კონტაქტი)
+   - Georgian contact details and working hours.
+   - Embedded Google Map (Georgian address).
+   - Quick chat button: opens WhatsApp or Messenger (Georgian label).
+   - No contact form here (explicit).
+
+6) Case Studies / Portfolio (კაზუსები)
+   - Each caseStudy page in Georgian: problem, solution, impact (metrics — if available), and screenshots or GIFs of workflows.
+   - Animated before/after state visualizations.
+
+7) Admin Area (private, secure)
+   - Simple admin dashboard to view orders (list, filter by status, search by Order ID or email).
+   - Order detail panel with all uploaded files, comments, and ability to change status (New → In Review → In Progress → Delivered → Closed).
+   - Buttons to trigger Slack/email notifications, export order to CSV, create n8n job (webhook) to kick off internal onboarding.
+   - Protected via SSO or password; store credentials in environment variables.
+
+Global Components & UI Patterns
+-------------------------------
+- Header: Georgian nav (მთავარი, სერვისები, შეკვეთა, ჩვენ შესახებ, კონტაქტი) — sticky with animated underline on hover.
+- Footer: Georgian copyright & social icons.
+- Modal system with focus trap and accessible close.
+- Reusable Card, Chip, Badge, and Icon components implemented with Tailwind + shadcn/ui.
+- Use React Hook Form + Zod for validation; show errors in Georgian for site text and in English for form field-level tooltips where fields are English.
+
+Animations & Motion Strategy
+----------------------------
+- Use **Framer Motion** for component transitions and micro-interactions.
+- Use **Lottie** for complex SVG animations (workflow animations, hero visuals, success states).
+- Use animated SVG backgrounds that react to mouse position subtly.
+- Performance: disable heavy animations on reduced-motion user setting and on low-power devices.
+- CPU-friendly: limit anim frequency, prefer CSS transforms (translate, scale, opacity) and GPU-accelerated properties.
+
+Technical Stack & Implementation Notes
+--------------------------------------
+- Recommended stack: **Next.js (13/14) with app/router)** OR React with SSR. Use TypeScript.
+- Styling: **TailwindCSS** + shadcn/ui primitives. Keep tailwind.config set to load Georgian webfonts.
+- Animations: **Framer Motion**, Lottie (react-lottie-player).
+- Forms: React Hook Form + Zod.
+- DB / Storage: **Supabase** or **Postgres + Prisma** for orders and file metadata; file uploads to S3 / Supabase storage.
+- Notifications: SendGrid (email) + Slack webhook. Environment variables must be used for keys (SENDGRID_API_KEY, SLACK_WEBHOOK_URL, DATABASE_URL).
+- Optional quick setup: Airtable for minimal MVP (orders collected into Airtable view).
+- Deploy: Vercel recommended; ensure environment variables set; use CDN for images & Lottie JSON.
+- Analytics: Google Analytics or Plausible + consent modal (Georgian privacy consent).
+
+Security & Privacy
+------------------
+- HTTPS enforced.
+- Input sanitization & size limits for uploads.
+- Rate limiting on order endpoint.
+- GDPR-like privacy notice (Georgian) and privacy policy page (Georgian).
+- Never store API credentials in plaintext; optionally support encrypted secrets and temporary credential upload instructions.
+
+SEO & Performance
+-----------------
+- Server-side rendered meta tags in Georgian (title, description).
+- Social previews (OG tags) include Georgian text.
+- Structured data (JSON-LD) for Organization and WebSite schema.
+- Lighthouse performance target: >90 mobile & desktop.
+- Use image optimization and LQIP placeholders for key visuals.
+
+Deliverables
+------------
+1. Production-ready Next.js repository with documented README for setup and deployment.
+2. Figma design file or equivalent with all screens and components (desktop & mobile).
+3. Deployed site on Vercel (or provided deployment instructions).
+4. Admin dashboard accessible to project managers.
+5. Documentation for handoff: how to change Georgian copy, update animations, and manage orders.
+6. Test cases checklist & acceptance criteria (see below).
+
+Acceptance Criteria (QA)
+------------------------
+- All visible user UI text (navigation, headings, descriptions, CTAs) is Georgian, except the order form fields and placeholders (which are English).
+- No pricing page exists anywhere.
+- Order wizard works end-to-end: submit -> DB record -> email & Slack notifications -> success screen in Georgian shown.
+- Site is responsive and accessible (WCAG AA where reasonable), with keyboard navigation and reduced motion support.
+- Admin can view and change order status.
+- Performance and SEO checks pass (basic Lighthouse thresholds).
+
+Optional advanced features (add if time/budget allow)
+----------------------------------------------------
+- Live chat bot integration to answer pre-order questions (Georgian).
+- Progress tracking page where clients can log in and see milestone updates (Georgian).
+- Sample automated demo that shows an n8n “playback” of a trivial workflow (no credentials) to showcase the service.
+- Multi-language toggle for future expansion (keep Georgian default).
+
+Appendix A — Georgian copy to use for visible site text
+-------------------------------------------------------
+(Use these exact strings for headings, CTAs and major angular copy — everything on the site that is visible must be Georgian)
+
+Site nav (Georgian):
+- მთავარი
+- სერვისები
+- შეკვეთა
+- ჩვენ შესახებ
+- კონტაქტი
+
+Hero:
+- Headline: "შენი ბიზნესის ავტომატიზაცია — მარტივად, სწრაფად და პროფესიონალურად"
+- Subheadline: "ჩვენ ვქმნით მორგებულ n8n ავტომატიზაციებს, რომლებიც ამცირებენ დროს და ზრდიან ეფექტურობას."
+- Primary CTA: "შეუკვეთე ახლა"
+- Secondary CTA: "ნახე სერვისები"
+
+Why-us cards (titles):
+- "დაზოგე დრო"
+- "შეამცირე ხარჯები"
+- "მონიტორინგი და მხარდაჭერა"
+- "უსაფრთხო ინტეგრაციები"
+
+Services (examples — titles):
+- "Messenger / WhatsApp ჩატბოტები"
+- "CRM ინტეგრაციები"
+- "ელ. ფოსტების ავტომატიზაცია"
+- "ფაილებისა და მონაცემების სინქრონიზაცია"
+- CTA on each: "გაიგე მეტი"
+
+Order success (Georgian confirmation):
+- "შეკვეთა წარმატებით გაიგზავნა! ჩვენ მალე დაგიკავშირდებით."
+- Short follow-up: "თქვენი შეკვეთის ID: {ORDER_ID}. შეტყობინება ელ.ფოსტაზე გაიგზავნა."
+
+Contact page:
+- "კონტაქტი"
+- "დაგვიკავშირდით"
+- "სამუშაო საათები: ორშ — პარ 09:00 — 18:00"
+
+About page:
+- "ჩვენ შესახებ"
+- "მისია"
+- "ჩვენი გუნდი"
+
+Footer:
+- "მფლობელი © {YEAR} — ყველა უფლება დაცულია."
+- "კონფიდენციალურობის პოლიტიკა" (Georgian privacy policy link)
+- "სოციალური ქსელები"
+
+Tooltips & microcopy (examples, Georgian):
+- "აირჩიეთ ავტომატიზაციის ტიპი რომ დავეხმაროთ სწორად გაწყობაში."
+- "ჩამოტვირთეთ მაგალით მონაცემი CSV ან JSON ფორმატში."
+
+Appendix B — English form field labels (ORDER WIZARD)
+----------------------------------------------------
+(These labels/placeholders must be used exactly in the form fields)
+- "Full name" (placeholder: "Full name")
+- "Email address" (placeholder: "Email address")
+- "Company (optional)" (placeholder: "Company (optional)")
+- "Project name" (placeholder: "Project name")
+- "Type of automation" (dropdown options: "WhatsApp/Messenger chatbot", "CRM integration", "Email automation", "File sync / ETL", "Custom workflow - explain")
+- "Short project description" (textarea placeholder)
+- "Integrations (select multiple)"
+- "Attach files"
+- "Delivery priority"
+- "Submit request" (final submit button)
+
+Notes for implementation team
+-----------------------------
+- Provide a short onboarding checklist for clients (in Georgian) after order submission that explains next steps and typical timelines.
+- Provide admin instructions (in English) for environment variables and webhooks.
+- Provide fallback plain-SVG animations if Lottie is removed for performance reasons.

@@ -1,0 +1,190 @@
+Title: Build a Node.js + Express app on Replit that accepts a "Review & Submit" form and sends the submitted data by email (Gmail SMTP / Nodemailer)
+
+Goal: When a user fills the form, the Replit server receives the POST, formats the data, and sends it to giorginatsvlishvili2010@gmail.com. Use environment variables (Replit Secrets) for credentials.
+
+Stack & libs
+
+Node.js (Replit Node template)
+
+Express
+
+Nodemailer
+
+Optional: dotenv for local dev
+
+Static frontend: public/index.html
+
+Files to create
+
+package.json (or run npm init -y)
+
+server.js (Express + Nodemailer)
+
+public/index.html (form + JS to POST to /submit)
+
+Commands (shell in Replit)
+
+npm init -y
+npm i express nodemailer
+# optionally: npm i dotenv
+
+
+Environment variables (Replit Secrets)
+
+GMAIL_USER = giorgi.natsvlishvili@geolab.edu.ge
+
+GMAIL_PASS = (your Gmail App Password — DO NOT paste into code)
+
+How to set them in Replit: click the padlock / Secrets button (left panel), add GMAIL_USER and GMAIL_PASS. Never commit secrets.
+
+Important security note
+
+Do NOT use your account password if possible. For Gmail, enable 2-Step Verification and generate an App Password in your Google account, then paste that 16-char App Password into GMAIL_PASS. If your Google Workspace account blocks App Passwords, use a transactional email provider (SendGrid/Mailgun) instead.
+
+server.js (paste into your Repl)
+
+// server.js
+const express = require('express');
+const nodemailer = require('nodemailer');
+const path = require('path');
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public')); // serves public/index.html
+
+// POST /submit receives form data and sends email
+app.post('/submit', async (req, res) => {
+  const { name, email, company, project, type, integrations, priority } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and Email are required' });
+  }
+
+  // create transporter using SMTP (Gmail)
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: 'giorginatsvlishvili2010@gmail.com', // recipient
+    subject: `New Project Submission from ${name}`,
+    text: `
+Name: ${name}
+Email: ${email}
+Company: ${company || '-'}
+Project: ${project || '-'}
+Automation Type: ${type || '-'}
+Integrations: ${integrations || '-'}
+Priority: ${priority || '-'}
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.json({ message: 'Submission sent successfully' });
+  } catch (err) {
+    console.error('Email send error:', err);
+    return res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+public/index.html
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Review & Submit</title>
+</head>
+<body>
+  <h1>Review & Submit</h1>
+  <form id="projectForm">
+    <input name="name" placeholder="Name" required /><br/>
+    <input name="email" type="email" placeholder="Email" required /><br/>
+    <input name="company" placeholder="Company" /><br/>
+    <input name="project" placeholder="Project" /><br/>
+    <input name="type" placeholder="Automation Type" /><br/>
+    <input name="integrations" placeholder="Integrations" /><br/>
+    <select name="priority">
+      <option value="standard">Standard</option>
+      <option value="high">High</option>
+    </select><br/>
+    <button type="submit">Review & Submit</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    const form = document.getElementById('projectForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      status.textContent = 'Sending...';
+      try {
+        const res = await fetch('/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (res.ok) {
+          status.textContent = json.message || 'Sent';
+          form.reset();
+        } else {
+          status.textContent = json.error || 'Failed to send';
+        }
+      } catch (err) {
+        status.textContent = 'Network error';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+package.json (ensure start script)
+
+{
+  "name": "replit-email-form",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.4"
+  }
+}
+
+
+Run & test
+
+Set GMAIL_USER and GMAIL_PASS in Replit Secrets. (GMAIL_USER = giorgi.natsvlishvili@geolab.edu.ge, GMAIL_PASS = App Password or secret.)
+
+Start the Repl (click Run).
+
+Open the web view (the Repl URL), fill the form, press Review & Submit.
+
+Check giorginatsvlishvili2010@gmail.com inbox and Replit console logs.
+
+If Gmail blocks sending
+
+Make sure 2-Step Verification is ON and use an App Password.
+
+If your org blocks App Passwords, use SendGrid or Mailgun: create an API key, store as SENDGRID_API_KEY, and either use a SendGrid SMTP user apikey / pass SENDGRID_API_KEY, or use a SendGrid transport plugin with Nodemailer.
